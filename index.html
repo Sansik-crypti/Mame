@@ -1,0 +1,582 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подарок для мамы Лены</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@600;700&family=Pacifico&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #ffe0e9 0%, #ffb6c1 100%);
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- ФОН И ШАРИКИ --- */
+        .balloons-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1; /* Самый задний план */
+            opacity: 0.6; /* Более прозрачные */
+        }
+
+        .balloon {
+            position: absolute;
+            bottom: -100px;
+            /* Сделал шарики меньше */
+            width: 45px;
+            height: 55px;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            animation: floatUp 15s infinite linear;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            text-align: center;
+            font-size: 10px; /* Текст внутри шарика меньше */
+            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
+            padding: 5px;
+            box-sizing: border-box;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            will-change: transform; /* Оптимизация для плавности */
+        }
+
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-bottom: 8px solid inherit;
+        }
+
+        .balloon-string {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            width: 1px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        @keyframes floatUp {
+            0% { transform: translate3d(0, 0, 0) rotate(-5deg); }
+            50% { transform: translate3d(20px, -60vh, 0) rotate(5deg); }
+            100% { transform: translate3d(-20px, -120vh, 0) rotate(-5deg); }
+        }
+
+        /* --- СЦЕНА И КОРОБКА --- */
+        .scene {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .instruction {
+            position: absolute;
+            top: 15%;
+            font-family: 'Pacifico', cursive;
+            color: #d63031;
+            font-size: 28px;
+            text-shadow: 2px 2px 0px #fff;
+            animation: pulse 1.5s infinite;
+            z-index: 50;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .gift-container {
+            position: relative;
+            width: 260px;
+            height: 220px;
+            cursor: pointer;
+            z-index: 20;
+            margin-top: 150px;
+            will-change: transform;
+        }
+
+        .box-body {
+            position: absolute;
+            bottom: 0;
+            left: 10px;
+            width: 240px;
+            height: 160px;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2), inset 0 -10px 20px rgba(0,0,0,0.05);
+            z-index: 10;
+            will-change: transform;
+        }
+
+        .box-lid {
+            position: absolute;
+            bottom: 145px;
+            left: 0;
+            width: 260px;
+            height: 50px;
+            background: linear-gradient(135deg, #ffffff 0%, #f3f3f3 100%);
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            z-index: 12;
+            will-change: transform;
+        }
+
+        /* Ленточки */
+        .ribbon-v {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 36px;
+            height: 100%;
+            background: linear-gradient(to right, #ff4757, #ff6b81, #ff4757);
+        }
+
+        .ribbon-h {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            height: 36px;
+            background: linear-gradient(to bottom, #ff4757, #ff6b81, #ff4757);
+        }
+
+        .bow {
+            position: absolute;
+            bottom: 180px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 60px;
+            z-index: 15;
+            will-change: transform, opacity;
+        }
+
+        .bow-left, .bow-right {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: #ff4757;
+            border-radius: 50% 50% 0 50%;
+            top: 10px;
+        }
+
+        .bow-left { left: 0; transform: rotate(45deg); }
+        .bow-right { right: 0; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
+
+        .bow-center {
+            position: absolute;
+            top: 20px;
+            left: 38px;
+            width: 24px;
+            height: 24px;
+            background: #ff6b81;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        /* --- АНИМАЦИИ КОРОБКИ --- */
+        .bow.fall { animation: fallBow 0.8s forwards ease-in; }
+        .fade-out { animation: fadeOut 0.5s forwards; }
+        
+        @keyframes fallBow {
+            0% { transform: translateX(-50%) translateY(0) rotate(0); }
+            100% { transform: translateX(100px) translateY(300px) rotate(90deg); opacity: 0; }
+        }
+
+        @keyframes fadeOut { to { opacity: 0; } }
+
+        .box-lid.open { animation: liftLid 1s forwards ease-in-out; }
+        
+        @keyframes liftLid {
+            0% { transform: translate3d(0,0,0) rotate(0); }
+            30% { transform: translate3d(0, -50px, 0) rotate(2deg); }
+            100% { transform: translate3d(-200px, -500px, 0) rotate(-30deg); opacity: 0; }
+        }
+
+        .box-body.shake { animation: shakeBox 0.3s infinite; }
+        
+        @keyframes shakeBox {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px) rotate(-1deg); }
+            75% { transform: translateX(5px) rotate(1deg); }
+        }
+
+        /* --- ОТКРЫТКА (3D) --- */
+        .card-container {
+            position: absolute;
+            bottom: 20px; 
+            left: 50%;
+            width: 320px; /* Немного шире для надежности текста */
+            height: 440px;
+            transform: translate(-50%, 0) scale(0.1);
+            perspective: 2000px;
+            z-index: 5;
+            opacity: 0;
+            transition: transform 1.2s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.5s;
+            pointer-events: none; /* Пока не вылетит, кликать нельзя */
+            will-change: transform;
+        }
+
+        /* Вылет закрытой открытки */
+        .card-container.fly-out {
+            transform: translate(-50%, -260px) scale(1);
+            opacity: 1;
+            z-index: 100;
+            pointer-events: auto; /* Теперь можно кликать */
+            cursor: pointer;
+        }
+
+        /* Анимация пульсации закрытой открытки, чтобы привлечь внимание */
+        .card-container.fly-out.waiting-click {
+            animation: floatCard 2s infinite ease-in-out;
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translate(-50%, -260px) scale(1); }
+            50% { transform: translate(-50%, -270px) scale(1.02); }
+        }
+
+        /* Открытие открытки (смещение всей конструкции вправо) */
+        .card-container.open-book {
+            transform: translate(0%, -260px) scale(1) !important; /* Убираем float-анимацию */
+            animation: none;
+            cursor: default;
+        }
+
+        .card-page {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            backface-visibility: hidden;
+        }
+
+        /* --- СТРУКТУРА СТРАНИЦ --- */
+        
+        /* Правая часть (Текст) - Всегда сзади, лежит статично */
+        .right-page {
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* Важно: отступы и box-sizing чтобы текст не вылезал */
+            padding: 20px;
+            box-sizing: border-box;
+            background: #fffaf0;
+            border: 2px solid #ffd700;
+            overflow: hidden; /* Защита от вылезания */
+        }
+
+        .right-page h1 {
+            font-family: 'Caveat', cursive;
+            color: #e84393;
+            font-size: 38px;
+            margin: 0 0 10px 0;
+            text-align: center;
+            line-height: 1;
+            width: 100%;
+        }
+
+        .right-page p {
+            font-family: 'Caveat', cursive;
+            color: #2d3436;
+            font-size: 22px; /* Уменьшил шрифт текста */
+            line-height: 1.2;
+            text-align: center;
+            margin: 0;
+            width: 100%;
+            /* Переносы слов, если потребуется */
+            word-wrap: break-word; 
+        }
+
+        /* Левая часть (Вращается). Содержит обложку и картинку */
+        .left-page-wrapper {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            transform-origin: left center;
+            transition: transform 1.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-style: preserve-3d;
+            z-index: 2;
+        }
+
+        .card-container.open-book .left-page-wrapper {
+            transform: rotateY(-180deg);
+        }
+
+        /* Самая первая обложка открытки */
+        .front-cover {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border: 3px solid #fff;
+            box-sizing: border-box;
+            backface-visibility: hidden;
+            z-index: 3;
+            transform: rotateY(0deg); /* Лицом к нам изначально */
+        }
+
+        .front-cover h2 {
+            font-family: 'Pacifico', cursive;
+            font-size: 42px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin: 0;
+            text-align: center;
+            padding: 0 10px;
+        }
+        
+        .click-hint {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            margin-top: 20px;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            animation: pulseHint 1.5s infinite;
+        }
+
+        @keyframes pulseHint {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        /* Внутренняя сторона обложки (с картинкой) */
+        .back-cover {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            box-sizing: border-box;
+            border: 2px solid #ffd700;
+            backface-visibility: hidden;
+            transform: rotateY(180deg); /* Изначально отвернута от нас */
+            z-index: 2;
+        }
+
+        .back-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 700px) {
+            .card-container {
+                width: 160px; /* Ровно половина экрана */
+                height: 230px;
+            }
+            /* Уменьшаем шрифты чтобы точно влезло */
+            .right-page h1 { font-size: 20px; margin-bottom: 5px; }
+            .right-page p { font-size: 13px; line-height: 1.1; }
+            .front-cover h2 { font-size: 24px; }
+            .click-hint { font-size: 10px; }
+            
+            .card-container.open-book {
+                /* Сдвигаем чтобы обе половинки (по 160px) поместились на экране */
+                transform: translate(0%, -180px) scale(1) !important;
+            }
+            .card-container.fly-out {
+                transform: translate(-50%, -180px) scale(1);
+            }
+            @keyframes floatCard {
+                0%, 100% { transform: translate(-50%, -180px) scale(1); }
+                50% { transform: translate(-50%, -185px) scale(1.02); }
+            }
+            .gift-container { transform: scale(0.8); margin-top: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="balloons-container" id="balloons"></div>
+
+    <div class="scene">
+        <div class="instruction" id="instruction-main">Нажми на подарок!</div>
+
+        <div class="gift-container" id="gift-box">
+            
+            <!-- ОТКРЫТКА -->
+            <div class="card-container" id="card">
+                
+                <!-- Страница 2 (Текст) -->
+                <div class="card-page right-page">
+                    <h1>Мамочке Лене ❤️</h1>
+                    <p>
+                        С Днём Рождения, самая родная!<br><br>
+                        Пусть каждый день приносит только радость! Твои 43 — это всего лишь 21 с хвостиком. Оставайся такой же невероятно красивой и доброй!<br><br>
+                        Люблю тебя бесконечно! ✨
+                    </p>
+                </div>
+                
+                <!-- Страница 1 (Вращающаяся: Обложка + Картинка) -->
+                <div class="left-page-wrapper">
+                    <!-- Лицевая обложка -->
+                    <div class="front-cover">
+                        <h2>С Днем<br>Рождения!</h2>
+                        <div class="click-hint">Нажми, чтобы открыть</div>
+                    </div>
+                    <!-- Изнанка обложки (картинка) -->
+                    <div class="back-cover">
+                        <img src="img.png" alt="Мое фото" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1562690868-60bbe7293e94?auto=format&fit=crop&w=400&q=80';">
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- КОРОБКА -->
+            <div class="box-body" id="box-body">
+                <div class="ribbon-v ribbon-fade"></div>
+                <div class="ribbon-h ribbon-fade"></div>
+            </div>
+            
+            <div class="box-lid" id="box-lid">
+                <div class="ribbon-v ribbon-fade"></div>
+            </div>
+
+            <div class="bow" id="bow">
+                <div class="bow-left"></div>
+                <div class="bow-right"></div>
+                <div class="bow-center"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // 1. Оптимизированная генерация шариков
+        const balloonsContainer = document.getElementById('balloons');
+        const balloonColors = ['rgba(255,118,117,0.7)', 'rgba(116,185,255,0.7)', 'rgba(85,239,196,0.7)', 'rgba(255,234,167,0.7)', 'rgba(253,121,168,0.7)'];
+        const texts = ['43', '21 с хвостиком', 'С Днём Рождения!', '❤️', 'Маме'];
+
+        // Уменьшил количество шариков для оптимизации
+        for(let i = 0; i < 15; i++) {
+            let balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            
+            balloon.style.left = Math.random() * 95 + 'vw';
+            balloon.style.backgroundColor = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+            // Разное время анимации
+            balloon.style.animationDuration = (Math.random() * 15 + 15) + 's'; 
+            balloon.style.animationDelay = (Math.random() * 10) + 's';
+            balloon.style.borderBottomColor = balloon.style.backgroundColor;
+
+            let string = document.createElement('div');
+            string.className = 'balloon-string';
+            balloon.appendChild(string);
+
+            let textSpan = document.createElement('span');
+            // Приоритет важным надписям
+            if (i === 0) textSpan.innerText = '43';
+            else if (i === 1) textSpan.innerText = '21 с хвостиком';
+            else textSpan.innerText = texts[Math.floor(Math.random() * texts.length)];
+            
+            if(textSpan.innerText === '43' || textSpan.innerText === '21 с хвостиком') {
+                textSpan.style.fontSize = '12px';
+                balloon.style.width = '55px';
+                balloon.style.height = '65px';
+            }
+
+            balloon.appendChild(textSpan);
+            balloonsContainer.appendChild(balloon);
+        }
+
+        // 2. Логика анимации коробки
+        const giftBox = document.getElementById('gift-box');
+        const card = document.getElementById('card');
+        const instructionMain = document.getElementById('instruction-main');
+        let boxOpened = false;
+        let cardOpened = false;
+
+        giftBox.addEventListener('click', (e) => {
+            // Если клик был по самой открытке после того как она вылетела - игнорируем, 
+            // так как у открытки свой обработчик
+            if (e.target.closest('#card') && boxOpened) return;
+
+            if (boxOpened) return;
+            boxOpened = true;
+
+            instructionMain.style.opacity = '0';
+
+            // Ленточки
+            document.getElementById('bow').classList.add('fall');
+            document.querySelectorAll('.ribbon-fade').forEach(el => el.classList.add('fade-out'));
+
+            setTimeout(() => {
+                // Крышка
+                document.getElementById('box-lid').classList.add('open');
+
+                setTimeout(() => {
+                    // Тряска
+                    const boxBody = document.getElementById('box-body');
+                    boxBody.classList.add('shake');
+
+                    setTimeout(() => {
+                        boxBody.classList.remove('shake');
+                        
+                        // Открытка вылетает ЗАКРЫТОЙ и ждет клика
+                        card.classList.add('fly-out');
+                        card.classList.add('waiting-click'); // Добавляет пульсацию
+
+                    }, 600);
+                }, 500);
+            }, 600);
+        });
+
+        // 3. Логика открытия самой открытки
+        card.addEventListener('click', (e) => {
+            // Разрешаем кликать только если она уже вылетела и еще не открыта
+            if (!card.classList.contains('fly-out') || cardOpened) return;
+            
+            cardOpened = true;
+            card.classList.remove('waiting-click'); // Убираем пульсацию
+            card.classList.add('open-book'); // Раскрываем
+            
+            // Останавливаем всплытие события, чтобы не триггерить клик по коробке снова
+            e.stopPropagation(); 
+        });
+
+    </script>
+</body>
+</html>
